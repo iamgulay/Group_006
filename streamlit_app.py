@@ -7,7 +7,7 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.compose import ColumnTransformer
 
 class CustomLabelEncoder(BaseEstimator, TransformerMixin):
-    def init(self, columns):
+    def __init__(self, columns):
         self.columns = columns
         self.encoders = {}
 
@@ -25,7 +25,7 @@ class CustomLabelEncoder(BaseEstimator, TransformerMixin):
         return X
 
 class FeaturesAdder(BaseEstimator, TransformerMixin):
-    def init(self):
+    def __init__(self):
         pass
 
     def fit(self, X, y=None):
@@ -37,22 +37,22 @@ class FeaturesAdder(BaseEstimator, TransformerMixin):
         X_new['pdays_group'] = pd.cut(X_new['pdays'], bins=[-1, 0, 30, 90, 180, 999], labels=[0, 1, 2, 3, 4])
         X_new['age_education_level'] = X_new['age'] * X_new['education'].astype('category').cat.codes
         return X_new
-        
-        loaded_model = pickle.load(open('bank_marketing_prediction.sav', 'rb'))
-    
-    def bank_marketing_prediction(input_data):
+
+# Load the model outside the function to avoid re-loading it every time the function is called
+loaded_model = pickle.load(open('bank_marketing_prediction.sav', 'rb'))
+
+def bank_marketing_prediction(input_data):
     # Correct the feature names to match the training data
     column_names = ['age', 'job', 'marital', 'education', 'default', 'housing', 'loan',
                     'contact', 'month', 'day_of_week', 'campaign', 'pdays', 'previous', 
                     'poutcome', 'emp.var.rate', 'cons.price.idx', 'cons.conf.idx', 
-                    'euribor3m', 'nr.employed']  # Use dot notation instead of underscores
+                    'euribor3m', 'nr.employed']
 
-    inputt_data = pd.DataFrame([input_data], columns=column_names)
-    prediction = loaded_model.predict(inputt_data)
+    input_data = pd.DataFrame([input_data], columns=column_names)
+    prediction = loaded_model.predict(input_data)
     return prediction[0]
 
 def main():
-
     # Giving a title
     st.title('Bank Marketing Prediction Web App')
     
@@ -91,5 +91,5 @@ def main():
         
     st.success(prediction)
     
-if _name_ == '_main_':
+if __name__ == '__main__':
     main()
