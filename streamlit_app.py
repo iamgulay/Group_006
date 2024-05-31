@@ -57,6 +57,7 @@ def preprocess_input_data(age, job, marital, education, default, housing, loan,
                           poutcome, emp_var_rate, cons_price_idx, cons_conf_idx, 
                           euribor3m, nr_employed):
     # Convert necessary features to appropriate data types
+    age = int(age)
     pdays = int(pdays)
     campaign = int(campaign)
     previous = int(previous)
