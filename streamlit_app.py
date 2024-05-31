@@ -52,6 +52,25 @@ def bank_marketing_prediction(input_data):
     prediction = loaded_model.predict(input_data)
     return prediction[0]
 
+def preprocess_input_data(age, job, marital, education, default, housing, loan,
+                          contact, month, day_of_week, campaign, pdays, previous, 
+                          poutcome, emp_var_rate, cons_price_idx, cons_conf_idx, 
+                          euribor3m, nr_employed):
+    # Convert necessary features to appropriate data types
+    pdays = int(pdays)
+    campaign = int(campaign)
+    previous = int(previous)
+    emp_var_rate = float(emp_var_rate)
+    cons_price_idx = float(cons_price_idx)
+    cons_conf_idx = float(cons_conf_idx)
+    euribor3m = float(euribor3m)
+    nr_employed = float(nr_employed)
+
+    return [age, job, marital, education, default, housing, loan,
+            contact, month, day_of_week, campaign, pdays, previous, 
+            poutcome, emp_var_rate, cons_price_idx, cons_conf_idx, 
+            euribor3m, nr_employed]
+
 def main():
     # Giving a title
     st.title('Bank Marketing Prediction Web App')
@@ -84,10 +103,11 @@ def main():
     
     # Getting the input data from the user
     if st.button('Bank Marketing Prediction'):
-        prediction = bank_marketing_prediction([age, job, marital, education, default, housing, loan,
-                                                contact, month, day_of_week, campaign, pdays, previous, 
-                                                poutcome, emp_var_rate, cons_price_idx, cons_conf_idx, 
-                                                euribor3m, nr_employed])
+        input_data = preprocess_input_data(age, job, marital, education, default, housing, loan,
+                                           contact, month, day_of_week, campaign, pdays, previous, 
+                                           poutcome, emp_var_rate, cons_price_idx, cons_conf_idx, 
+                                           euribor3m, nr_employed)
+        prediction = bank_marketing_prediction(input_data)
         
     st.success(prediction)
     
